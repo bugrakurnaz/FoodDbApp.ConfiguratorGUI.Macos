@@ -9,7 +9,7 @@ import Foundation
 
 class CategoryService {
     static let shared = CategoryService()
-    private let baseUrl = URL(string: "http://localhost:5000/api/")
+    private let baseUrl = URL(string: "http://localhost:8349/api/")
     
     func addCategory(_ category: Category, completion: @escaping (Result<Category, Error>) -> Void) {
         guard let url = URL(string: "categories", relativeTo: baseUrl) else { return }
