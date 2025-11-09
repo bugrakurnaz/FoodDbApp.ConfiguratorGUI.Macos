@@ -40,7 +40,13 @@ struct AllCategoriesView: View {
                     HStack {
                         Text(category.name)
                         Spacer()
-                        // You can add Edit/Delete buttons here later
+                        Button() {
+                            viewModel.deleteCategory(category)
+                        } label: {
+                            Image(systemName: "trash")
+                                .foregroundColor(.red)
+                                .help("Delete category")
+                        }.buttonStyle(.glass)
                     }
                 }
             }

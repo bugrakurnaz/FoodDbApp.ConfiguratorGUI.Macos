@@ -33,4 +33,24 @@ class AllCategoriesViewModel: ObservableObject {
             }
         }
     }
+    
+    func deleteCategory(_ category: Category) {
+        isLoading = true
+        errorMessage = nil
+        
+        CategoryService.shared.deleteCategory(category) { [weak self] result in
+            guard let self = self else { return }
+            self.isLoading = false
+            
+            switch result {
+            case .success:
+                // Remove the deleted category from the local list
+                self.categories.removeAll { $0.id == category.id }
+                
+            case .failure(let error):
+                self.errorMessage = "Failed to delete category: \(error.localizedDescription)"
+            }
+        }
+    }
+
 }

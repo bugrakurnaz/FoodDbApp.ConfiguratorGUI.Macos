@@ -44,6 +44,25 @@ class CategoryService {
         }.resume( )
     }
     
+    func deleteCategory(_ category: Category, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let categoryId = category.id?.uuidString else { return }
+        guard let url = URL(string: "categories/\(categoryId)", relativeTo: baseUrl) else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            DispatchQueue.main.async {
+                completion(.success(()))
+            }
+            
+        }.resume()
+    }
+    
     func updateCategory(_ category: Category, completion: @escaping (Result<Void, Error>) -> Void) {
         
         guard let categoryId = category.id else {
@@ -65,12 +84,11 @@ class CategoryService {
             return
         }
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: request) { _, response, error in
             if let error = error {
                 completion(.failure(error))
                 return
             }
-            guard let data = data else { return }
             DispatchQueue.main.async {
                 completion(.success(()))
             }
